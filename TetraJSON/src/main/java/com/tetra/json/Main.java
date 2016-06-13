@@ -7,9 +7,8 @@ public class Main {
 	public static void main(String[] args) {
 		TetraToJson tetraToJson = new TetraToJson();
 		tetraToJson.readNodes();
-		tetraToJson.nodesToJson();
 		tetraToJson.readLinks();
-		tetraToJson.linksToJson();
+		tetraToJson.parseToJson();
 	}
 
 }

@@ -3,6 +3,7 @@ package com.tetra.json.business;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -35,7 +36,7 @@ public class TetraToJson {
 		BufferedReader br = null;
 		try {
 			String sCurrentLine;
-			br = new BufferedReader(new FileReader("src\\main\\java\\com\\tetra\\json\\sources\\A-A.1"));
+			br = new BufferedReader(new FileReader("src/main/java/com/tetra/json/sources/AU-AU.1"));
 
 			if ((sCurrentLine = br.readLine()) != null) {
 				Scanner s = new Scanner(sCurrentLine);
@@ -59,7 +60,7 @@ public class TetraToJson {
 	}
 	
 	public void readLinks() {
-		Path filePath = new File("src\\main\\java\\com\\tetra\\json\\sources\\A-A.1").toPath();
+		Path filePath = new File("src/main/java/com/tetra/json/sources/AU-AU.1").toPath();
 		Charset charset = Charset.defaultCharset();        
 		List<String> listeLignes;
 		try {
@@ -88,22 +89,20 @@ public class TetraToJson {
 		}
 	}
 	
-	public void nodesToJson() {
-		String json = new Gson().toJson(this.nodes);
+	public void parseToJson() {
+		String json = new Gson().toJson(this);
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		JsonParser jp = new JsonParser();
 		JsonElement je = jp.parse(json);
 		String prettyJsonString = gson.toJson(je);
-		System.out.println(prettyJsonString);
-	}
-	
-	public void linksToJson() {
-		String json = new Gson().toJson(this.links);
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		JsonParser jp = new JsonParser();
-		JsonElement je = jp.parse(json);
-		String prettyJsonString = gson.toJson(je);
-		System.out.println(prettyJsonString);
+		try {
+			FileWriter file = new FileWriter("src/main/java/com/tetra/json/output/output.json");
+			file.write(prettyJsonString);
+			file.flush();
+			file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Node> getNodes() {
@@ -120,6 +119,11 @@ public class TetraToJson {
 	
 	public void setLinks(List<Link> links) {
 		this.links = links;
+	}
+
+	@Override
+	public String toString() {
+		return "TetraToJson [nodes=" + nodes + ", links=" + links + "]";
 	}
 	
 }
